@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vault — Sua Gaveta Segura</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- TELA DE AUTENTICAÇÃO -->
+    <div id="tela-auth" class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <rect x="8" y="16" width="24" height="20" rx="3" stroke="currentColor" stroke-width="2"/>
+                        <path d="M14 16V12a6 6 0 0 1 12 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="20" cy="26" r="3" fill="currentColor"/>
+                        <line x1="20" y1="29" x2="20" y2="32" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-name">VAULT</span>
+                    <span class="logo-sub">Sua Gaveta Segura</span>
+                </div>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="tab-btn active" id="tab-login" onclick="alternarAba('login')">Entrar</button>
+                <button class="tab-btn" id="tab-registro" onclick="alternarAba('registro')">Criar Conta</button>
+                <div class="tab-indicator"></div>
+            </div>
+
+            <!-- LOGIN -->
+            <div id="painel-login" class="auth-painel active">
+                <div class="input-wrapper">
+                    <label>E-mail</label>
+                    <div class="input-field">
+                        <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="m2 7 10 7 10-7" stroke="currentColor" stroke-width="1.5"/></svg>
+                        <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email" onkeydown="if(event.key==='Enter') fazerLogin()">
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <label>Senha</label>
+                    <div class="input-field">
+                        <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        <input type="password" id="login-senha" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter') fazerLogin()">
+                        <button class="toggle-pass" onclick="toggleSenha('login-senha', this)" type="button">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div id="erro-login" class="msg-erro"></div>
+                <button class="btn-primary" id="btn-login" onclick="fazerLogin()">
+                    <span>Entrar no Vault</span>
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+
+            <!-- REGISTRO -->
+            <div id="painel-registro" class="auth-painel">
+                <div class="input-wrapper">
+                    <label>Nome de usuário</label>
+                    <div class="input-field">
+                        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        <input type="text" id="reg-nome" placeholder="Seu nome">
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <label>E-mail</label>
+                    <div class="input-field">
+                        <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="m2 7 10 7 10-7" stroke="currentColor" stroke-width="1.5"/></svg>
+                        <input type="email" id="reg-email" placeholder="seu@email.com">
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <label>Senha</label>
+                    <div class="input-field">
+                        <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        <input type="password" id="reg-senha" placeholder="Mín. 6 caracteres" oninput="verificarForca()">
+                        <button class="toggle-pass" onclick="toggleSenha('reg-senha', this)" type="button">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="senha-forca">
+                    <div class="forca-bar"><div id="forca-fill"></div></div>
+                    <span id="forca-texto"></span>
+                </div>
+                <div id="erro-registro" class="msg-erro"></div>
+                <div id="sucesso-registro" class="msg-sucesso"></div>
+                <button class="btn-primary" id="btn-registro" onclick="criarConta()">
+                    <span>Criar Conta</span>
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA PRINCIPAL -->
+    <div id="tela-principal" style="display:none">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-icon small">
+                        <svg viewBox="0 0 40 40" fill="none"><rect x="8" y="16" width="24" height="20" rx="3" stroke="currentColor" stroke-width="2"/><path d="M14 16V12a6 6 0 0 1 12 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="26" r="3" fill="currentColor"/><line x1="20" y1="29" x2="20" y2="32" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </div>
+                    <span>VAULT</span>
+                </div>
+                <button class="btn-icon" onclick="toggleSidebar()">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" onclick="filtrarView('todos', this)">
+                    <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+                    <span>Todos</span>
+                    <span class="nav-badge" id="badge-todos">0</span>
+                </button>
+                <button class="nav-item" onclick="filtrarView('notas', this)">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6z" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="17" x2="12" y2="17" stroke="currentColor" stroke-width="1.5"/></svg>
+                    <span>Notas</span>
+                    <span class="nav-badge" id="badge-notas">0</span>
+                </button>
+                <button class="nav-item" onclick="filtrarView('arquivos', this)">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="1.5"/><polyline points="7 10 12 15 17 10" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="1.5"/></svg>
+                    <span>Arquivos</span>
+                    <span class="nav-badge" id="badge-arquivos">0</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">U</div>
+                    <div class="user-details">
+                        <span class="user-name" id="user-nome-sidebar">Usuário</span>
+                        <span class="user-role">Membro</span>
+                    </div>
+                </div>
+                <button class="btn-icon btn-logout" onclick="logout()" title="Sair">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="16 17 21 12 16 7" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="1.5"/></svg>
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content" id="main-content">
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1 class="page-title" id="page-title">Minha Gaveta</h1>
+                    <span class="page-subtitle" id="page-subtitle">Todos os seus itens salvos</span>
+                </div>
+                <div class="topbar-right">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        <input type="text" id="busca" placeholder="Buscar itens..." oninput="buscarItens(this.value)">
+                    </div>
+                    <button class="btn-primary btn-sm" onclick="abrirModal()">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        <span>Novo Item</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon cyan">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6z" stroke="currentColor" stroke-width="1.5"/></svg>
+                    </div>
+                    <div><div class="stat-num" id="stat-notas">0</div><div class="stat-label">Notas</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon violet">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="1.5"/><polyline points="7 10 12 15 17 10" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="1.5"/></svg>
+                    </div>
+                    <div><div class="stat-num" id="stat-arquivos">0</div><div class="stat-label">Arquivos</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon amber">
+                        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+                    </div>
+                    <div><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total</div></div>
+                </div>
+            </div>
+
+            <!-- LOADING -->
+            <div id="loading-state" class="loading-state">
+                <div class="spinner"></div>
+                <span>Carregando itens...</span>
+            </div>
+
+            <div id="empty-state" class="empty-state" style="display:none">
+                <div class="empty-icon">
+                    <svg viewBox="0 0 80 80" fill="none"><rect x="15" y="25" width="50" height="42" rx="5" stroke="currentColor" stroke-width="2"/><path d="M27 25V18a13 13 0 0 1 26 0v7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="40" cy="46" r="5" stroke="currentColor" stroke-width="2"/><line x1="40" y1="51" x2="40" y2="56" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <h3>Sua gaveta está vazia</h3>
+                <p>Clique em "Novo Item" para guardar notas e arquivos aqui.</p>
+            </div>
+
+            <div id="grid-itens" class="grid-itens" style="display:none"></div>
+        </main>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal-overlay" class="modal-overlay" onclick="fecharModal(event)">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Guardar na Gaveta</h3>
+                <button class="btn-icon" onclick="fecharModalBtn()">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-wrapper">
+                    <label>Nota (opcional)</label>
+                    <textarea id="texto-nota" placeholder="Escreva algo para guardar..." rows="4"></textarea>
+                </div>
+                <div class="upload-area" id="upload-area" onclick="document.getElementById('upload-arquivo').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                    <div class="upload-icon">
+                        <svg viewBox="0 0 48 48" fill="none"><path d="M24 32V16M16 24l8-8 8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 36a8 8 0 0 1-2-5.5C6 25.7 10.2 22 15.4 22c.4 0 .7 0 1.1.1C17.8 17.4 21.6 14 26 14c5.5 0 10 4.7 10 10.5 0 .3 0 .6-.1.9A7 7 0 0 1 40 32a7 7 0 0 1-7 7H12a7 7 0 0 1-4-3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <p class="upload-text">Arraste um arquivo ou <strong>clique para escolher</strong></p>
+                    <p class="upload-hint">Qualquer tipo de arquivo • Máx. 1MB</p>
+                    <input type="file" id="upload-arquivo" style="display:none" onchange="mostrarArquivoSelecionado(this)">
+                </div>
+                <div id="arquivo-preview" class="arquivo-preview" style="display:none">
+                    <div class="arquivo-info">
+                        <div class="arquivo-tipo-icon" id="arquivo-tipo-icon">📄</div>
+                        <div>
+                            <div class="arquivo-nome" id="arquivo-nome"></div>
+                            <div class="arquivo-tamanho" id="arquivo-tamanho"></div>
+                        </div>
+                    </div>
+                    <button class="btn-icon btn-remove" onclick="removerArquivo()">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-ghost" onclick="fecharModalBtn()">Cancelar</button>
+                <button class="btn-primary" id="btn-salvar" onclick="salvarItem()">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="1.5"/><polyline points="17 21 17 13 7 13 7 21" stroke="currentColor" stroke-width="1.5"/><polyline points="7 3 7 8 15 8" stroke="currentColor" stroke-width="1.5"/></svg>
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- FIREBASE SDK -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>
